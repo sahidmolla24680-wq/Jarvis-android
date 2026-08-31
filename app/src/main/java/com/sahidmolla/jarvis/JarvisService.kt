@@ -116,7 +116,6 @@ class JarvisService : Service(), TextToSpeech.OnInitListener {
                 override fun onResults(
                     results: Bundle?
                 ) {
-
                     val matches =
                         results?.getStringArrayList(
                             SpeechRecognizer.RESULTS_RECOGNITION
