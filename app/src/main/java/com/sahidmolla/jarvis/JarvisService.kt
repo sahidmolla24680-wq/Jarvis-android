@@ -20,6 +20,8 @@ import java.util.Locale
 
 class JarvisService : Service(), TextToSpeech.OnInitListener {
 
+    private var serviceDestroyed = false
+
     private var recognizer: SpeechRecognizer? = null
     private lateinit var tts: TextToSpeech
 
@@ -37,7 +39,7 @@ class JarvisService : Service(), TextToSpeech.OnInitListener {
             channelId
         )
             .setContentTitle("Jarvis চালু আছে")
-            .setContentText("“জার্ভিস” বললে সাড়া দেওয়ার চেষ্টা করবে")
+            .setContentText("“জার্ভিস” বললে সাড়া দেবে")
             .setSmallIcon(android.R.drawable.ic_btn_speak_now)
             .setOngoing(true)
             .build()
@@ -93,19 +95,24 @@ class JarvisService : Service(), TextToSpeech.OnInitListener {
 
                 override fun onReadyForSpeech(
                     params: Bundle?
-                ) {}
+                ) {
+                }
 
-                override fun onBeginningOfSpeech() {}
+                override fun onBeginningOfSpeech() {
+                }
 
                 override fun onRmsChanged(
                     rmsdB: Float
-                ) {}
+                ) {
+                }
 
                 override fun onBufferReceived(
                     buffer: ByteArray?
-                ) {}
+                ) {
+                }
 
-                override fun onEndOfSpeech() {}
+                override fun onEndOfSpeech() {
+                }
 
                 override fun onError(
                     error: Int
@@ -116,6 +123,7 @@ class JarvisService : Service(), TextToSpeech.OnInitListener {
                 override fun onResults(
                     results: Bundle?
                 ) {
+
                     val matches =
                         results?.getStringArrayList(
                             SpeechRecognizer.RESULTS_RECOGNITION
@@ -139,12 +147,14 @@ class JarvisService : Service(), TextToSpeech.OnInitListener {
 
                 override fun onPartialResults(
                     partialResults: Bundle?
-                ) {}
+                ) {
+                }
 
                 override fun onEvent(
                     eventType: Int,
                     params: Bundle?
-                ) {}
+                ) {
+                }
             }
         )
 
@@ -177,7 +187,7 @@ class JarvisService : Service(), TextToSpeech.OnInitListener {
 
         Handler(Looper.getMainLooper()).postDelayed(
             {
-                if (!isDestroyed) {
+                if (!serviceDestroyed) {
                     startListening()
                 }
             },
@@ -198,6 +208,8 @@ class JarvisService : Service(), TextToSpeech.OnInitListener {
     }
 
     override fun onDestroy() {
+
+        serviceDestroyed = true
 
         recognizer?.destroy()
 
