@@ -50,9 +50,17 @@ class JarvisService : Service(), TextToSpeech.OnInitListener {
     }
 
     override fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
-            tts.language = Locale("bn", "IN")
+    if (status == TextToSpeech.SUCCESS) {
+
+        val result = tts.setLanguage(Locale("bn", "IN"))
+
+        if (result != TextToSpeech.LANG_MISSING_DATA &&
+            result != TextToSpeech.LANG_NOT_SUPPORTED
+        ) {
+            tts.setSpeechRate(0.90f)
+            tts.setPitch(0.95f)
         }
+    }
     }
 
     private fun createNotificationChannel() {
