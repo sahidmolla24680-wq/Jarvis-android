@@ -48,8 +48,7 @@ class JarvisService : Service(), TextToSpeech.OnInitListener {
 
         startListening()
     }
-
-    override fun onInit(status: Int) {
+override fun onInit(status: Int) {
     if (status == TextToSpeech.SUCCESS) {
 
         val result = tts.setLanguage(Locale("bn", "IN"))
@@ -61,14 +60,15 @@ class JarvisService : Service(), TextToSpeech.OnInitListener {
             tts.setPitch(0.95f)
         }
     }
-    }
+}
 
-    private fun createNotificationChannel() {
-        val channel = NotificationChannel(
-            channelId,
-            "Jarvis Background Service",
-            NotificationManager.IMPORTANCE_LOW
-        )
+private fun createNotificationChannel() {
+    val channel = NotificationChannel(
+        channelId,
+        "Jarvis Background Service",
+        NotificationManager.IMPORTANCE_LOW
+    )
+    
 
         val manager =
             getSystemService(NotificationManager::class.java)
