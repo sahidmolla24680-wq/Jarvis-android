@@ -147,7 +147,7 @@ private fun createNotificationChannel() {
                         command.contains("জার্ভিস") ||
                         command.contains("jarvis")
                     ) {
-                        speak("জি বস!")
+                        speak("জি,বস")
                     }
 
                     restartListening()
