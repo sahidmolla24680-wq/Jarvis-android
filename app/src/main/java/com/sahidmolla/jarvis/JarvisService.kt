@@ -1,5 +1,7 @@
 package com.sahidmolla.jarvis
 
+import android.media.AudioManager
+import android.hardware.camera2.CameraManager
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -144,13 +146,82 @@ private fun createNotificationChannel() {
                         text.lowercase(Locale.getDefault())
 
                     if (
-                        command.contains("জার্ভিস") ||
-                        command.contains("jarvis")
-                    ) {
-                        speak("জি,বস")
-                    }
+    command.contains("জার্ভিস") ||
+    command.contains("jarvis")
+) {
+    speak("জী, বস")
 
-                    restartListening()
+    when {
+        command.contains("chrome") ||
+        command.contains("ক্রোম") -> {
+            val intent = packageManager.getLaunchIntentForPackage(
+                "com.android.chrome"
+            )
+            if (intent != null) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            } else {
+                speak("বস, Chrome ইনস্টল করা নেই।")
+            }
+        }
+
+        command.contains("youtube") ||
+        command.contains("ইউটিউব") -> {
+            val intent = packageManager.getLaunchIntentForPackage(
+                "com.google.android.youtube"
+            )
+            if (intent != null) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            } else {
+                speak("বস, YouTube পাওয়া যাচ্ছে না।")
+            }
+        }
+
+        command.contains("টর্চ") ||
+        command.contains("ফ্ল্যাশ") ||
+        command.contains("flashlight") -> {
+            val cameraManager =
+                getSystemService(CameraManager::class.java)
+
+            try {
+                val cameraId = cameraManager.cameraIdList[0]
+                cameraManager.setTorchMode(cameraId, true)
+                speak("বস, টর্চ অন করেছি।")
+            } catch (e: Exception) {
+                speak("বস, টর্চ অন করা গেল না।")
+            }
+        }
+
+        command.contains("ভলিউম বাড়াও") ||
+        command.contains("volume up") -> {
+            val audioManager =
+                getSystemService(AUDIO_SERVICE) as AudioManager
+
+            audioManager.adjustVolume(
+                AudioManager.ADJUST_RAISE,
+                AudioManager.FLAG_SHOW_UI
+            )
+
+            speak("বস, ভলিউম বাড়িয়েছি।")
+        }
+
+        command.contains("ভলিউম কমাও") ||
+        command.contains("volume down") -> {
+            val audioManager =
+                getSystemService(AUDIO_SERVICE) as AudioManager
+
+            audioManager.adjustVolume(
+                AudioManager.ADJUST_LOWER,
+                AudioManager.FLAG_SHOW_UI
+            )
+
+            speak("বস, ভলিউম কমিয়েছি।")
+        }
+    }
+}
+
+restartListening()
                 }
 
                 override fun onPartialResults(
